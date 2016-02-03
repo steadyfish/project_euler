@@ -5,45 +5,17 @@ library(dplyr)
 ser = "731671765313306249192251196744265747423553491949349698352031277450632623957831801698480186947885184385861560789112949495459501737958331928532088055111254069874715852386305071569329096329522744304355766896648950445244523161731856403098711121722383113622298934233803081353362766142828064444866452387493035890729629049156044077239071381051585930796086670172427121883998797908792274921901699720888093776657273330010533678812202354218097512545405947522435258490771167055601360483958644670632441572215539753697817977846174064955149290862569321978468622482839722413756570560574902614079729686524145351004748216637048440319989000889524345065854122758866688116427171479924442928230863465674813919123162824586178664583591245665294765456828489128831426076900422421902267105562632111110937054421750694165896040807198403850962455444362981230987879927244284909188845801561660979191338754992005240636899125607176060588611646710940507754100225698315520005593572972571636269561882670428252483600823257530420752963450"
 
 ser_df = data.frame(ser = unlist(strsplit(ser, "*")), stringsAsFactors = FALSE) %>%
-  mutate(ser_num = as.integer(ser),
-         ser_log = ifelse(ser_num %in% c(0, 1), log(ser_num + .1), log(ser_num)))
+  mutate(ser_num = as.integer(ser))
 
-ser_df1 = ser_df %>%
-  mutate(ser_log_sum = ser_log 
-         + lead(ser_log, 1)
-         + lead(ser_log, 2)
-         + lead(ser_log, 3)
-         + lead(ser_log, 4)
-         + lead(ser_log, 5)
-         + lead(ser_log, 6)
-         + lead(ser_log, 7)
-         + lead(ser_log, 8)
-         + lead(ser_log, 9)
-         + lead(ser_log, 10)
-         + lead(ser_log, 11)
-         + lead(ser_log, 12)
-         + lead(ser_log, 13),
-         ser_prod = ser_num 
-         * lead(ser_num, 1)
-         * lead(ser_num, 2)
-         * lead(ser_num, 3)
-         * lead(ser_num, 4)
-         * lead(ser_num, 5)
-         * lead(ser_num, 6)
-         * lead(ser_num, 7)
-         * lead(ser_num, 8)
-         * lead(ser_num, 9)
-         * lead(ser_num, 10)
-         * lead(ser_num, 11)
-         * lead(ser_num, 12)
-         * lead(ser_num, 13))
+ser_mat = matrix(nrow = nrow(ser_df), ncol = 14)
+ser_mat[, 1] = ser_df$ser_num
 
-st_ind = which.max(ser_df1[, 4])
-st_ind1 = which.max(ser_df1[, 5])
 
-op = ser_df1[st_ind:(st_ind+12), 2] 
-op1 = ser_df1[st_ind1:(st_ind1+12), 2] 
+for(i in 2:13){
+  ser_mat[, i] = lead(ser_mat[, (i-1)])
+}
 
-prod(op)
-prod(op1)
-
+ser_mat[, 14] = apply(ser_mat[, 1:13], 1, prod)
+st_ind2 = which.max(ser_mat[, 14])
+op2 = ser_mat[st_ind2, 1:13]
+prod(op2)
