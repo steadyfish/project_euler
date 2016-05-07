@@ -15,3 +15,14 @@ s_5 = compute_s_i(5, 1000)
 s_15 = compute_s_i(15, 1000)
 
 res = s_3 + s_5 - s_15
+
+
+# attempt 2:
+library(Rcpp)
+sourceCpp("src/p1.cpp")
+
+s_3 = compute_s_i_cpp(3, 1000)
+s_5 = compute_s_i_cpp(5, 1000)
+s_15 = compute_s_i_cpp(15, 1000)
+
+res = s_3 + s_5 - s_15
