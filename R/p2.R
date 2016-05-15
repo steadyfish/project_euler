@@ -26,3 +26,9 @@ get_even_fib_sum <- function(thresh){
 
 thresh = 4000000
 out = get_even_fib_sum(thresh)
+
+# attempt 2:
+library(Rcpp)
+sourceCpp("src/p2.cpp")
+thresh = 4000000
+out1 = get_even_fib_sum_cpp(thresh)
