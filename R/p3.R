@@ -2,6 +2,8 @@
 
 
 # Largest prime factor of the number 600851475143 
+
+# attempt 1
 check_for_primality <- function(num){
   thresh = floor(sqrt(num))
   prime_flag = 1
@@ -17,23 +19,32 @@ check_for_primality <- function(num){
   return(prime_flag)
 }
 
-n_in = 600851475143 
-k = 1
-out = vector(length = 100)
-for(i in 3:(10000)){ # (600851475143/3)
-  mod = n_in %% i
-  if(mod == 0){
-    print(paste0("i: ", i))
-    out[k] = i
-    fac_big = n_in / i
-    prime_flag = check_for_primality(fac_big)
-    print(paste0("prime_flag: ", prime_flag))
-    if(prime_flag == 1){
-      print(paste0("largest prime factor:", fac_big))
-      break
+get_largest_prime_factor <- function(n_in){
+  
+  k = 1
+  for(i in 3:(10000)){ # (600851475143/3)
+    mod = n_in %% i
+    if(mod == 0){
+      print(paste0("i: ", i))
+      fac_big = n_in / i
+      prime_flag = check_for_primality(fac_big)
+      print(paste0("prime_flag: ", prime_flag))
+      if(prime_flag == 1){
+        print(paste0("largest prime factor:", fac_big))
+        break
+      }
+      n_in = fac_big
+      print(paste0("new n_in: ", n_in))
+      k = k + 1
     }
-    n_in = fac_big
-    print(paste0("new n_in: ", n_in))
-    k = k + 1
   }
+  
+  return(fac_big)
 }
+
+out = get_largest_prime_factor(n_in = 600851475143)
+
+# attempt 2
+library(Rcpp)
+sourceCpp("src/p3.cpp")
+out = get_largest_prime_factor_cpp(n_in = 600851475143)
